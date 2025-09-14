@@ -1,0 +1,8 @@
+[
+    {
+      "id": 1,
+      "title": "React vs. Imperative JavaScript Example",
+      "path": "/react-vs-imperative",
+      "description": "A comparative presentation showing the difference between imperative vanilla JS and declarative React implementations."
+    }
+]
