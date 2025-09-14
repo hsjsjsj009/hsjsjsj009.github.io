@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Imperative vs Declarative UI</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .panel {
+            flex: 1;
+            min-width: 500px;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .panel h2 {
+            color: #3498db;
+            border-bottom: 2px solid #eaeaea;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .counter {
+            text-align: center;
+            font-size: 48px;
+            margin: 20px 0;
+            color: #2c3e50;
+        }
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-primary {
+            background-color: #3498db;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        .btn-secondary {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #c0392b;
+        }
+        .code-container {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            border-radius: 5px;
+            padding: 15px;
+            overflow-x: auto;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+        }
+        .comment {
+            color: #75715e;
+        }
+        .keyword {
+            color: #f92672;
+        }
+        .function {
+            color: #66d9ef;
+        }
+        .string {
+            color: #a6e22e;
+        }
+        .number {
+            color: #ae81ff;
+        }
+        .explanation {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-left: 4px solid #3498db;
+            margin-top: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        @media (max-width: 1100px) {
+            .container {
+                flex-direction: column;
+            }
+            .panel {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Imperative vs Declarative UI Programming</h1>
+    
+    <div class="container">
+        <div class="panel">
+            <h2>Imperative JavaScript (Vanilla JS)</h2>
+            <div class="counter" id="counter-value">0</div>
+            <div class="buttons">
+                <button class="btn-primary" id="increment-btn">Increment</button>
+                <button class="btn-secondary" id="decrement-btn">Decrement</button>
+                <button id="reset-btn">Reset</button>
+            </div>
+            
+            <div class="code-container">
+                <pre><code><span class="comment">// Select DOM elements</span>
+<span class="keyword">const</span> counterElement = document.<span class="function">getElementById</span>(<span class="string">'counter-value'</span>);
+<span class="keyword">const</span> incrementBtn = document.<span class="function">getElementById</span>(<span class="string">'increment-btn'</span>);
+<span class="keyword">const</span> decrementBtn = document.<span class="function">getElementById</span>(<span class="string">'decrement-btn'</span>);
+<span class="keyword">const</span> resetBtn = document.<span class="function">getElementById</span>(<span class="string">'reset-btn'</span>);
+
+<span class="comment">// Initialize counter value</span>
+<span class="keyword">let</span> count = <span class="number">0</span>;
+
+<span class="comment">// Update UI function</span>
+<span class="keyword">function</span> <span class="function">updateUI</span>() {
+    counterElement.textContent = count;
+    counterElement.style.color = count > <span class="number">0</span> ? <span class="string">'#2c3e50'</span> : count < <span class="number">0</span> ? <span class="string">'#e74c3c'</span> : <span class="string">'#2c3e50'</span>;
+}
+
+<span class="comment">// Add event listeners</span>
+incrementBtn.<span class="function">addEventListener</span>(<span class="string">'click'</span>, () => {
+    count++;
+    <span class="function">updateUI</span>(); <span class="comment">// Manually update UI after state change</span>
+});
+
+decrementBtn.<span class="function">addEventListener</span>(<span class="string">'click'</span>, () => {
+    count--;
+    <span class="function">updateUI</span>(); <span class="comment">// Manually update UI after state change</span>
+});
+
+resetBtn.<span class="function">addEventListener</span>(<span class="string">'click'</span>, () => {
+    count = <span class="number">0</span>;
+    <span class="function">updateUI</span>(); <span class="comment">// Manually update UI after state change</span>
+});
+
+<span class="comment">// Initial UI update</span>
+<span class="function">updateUI</span>();</code></pre>
+            </div>
+            
+            <div class="explanation">
+                <h3>Imperative Approach Characteristics:</h3>
+                <ul>
+                    <li>You explicitly describe <strong>how</strong> to achieve the result</li>
+                    <li>You manually select and update DOM elements</li>
+                    <li>You're responsible for managing state and UI synchronization</li>
+                    <li>Code describes the step-by-step process to update the UI</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="panel">
+            <h2>Declarative JavaScript (React)</h2>
+            <div id="react-root"></div>
+            
+            <div class="code-container">
+                <pre><code><span class="comment">// React component</span>
+<span class="keyword">function</span> <span class="function">Counter</span>() {
+    <span class="comment">// State management with useState hook</span>
+    <span class="keyword">const</span> [count, setCount] = React.<span class="function">useState</span>(<span class="number">0</span>);
+    
+    <span class="comment">// JSX describes WHAT the UI should look like</span>
+    <span class="keyword">return</span> (
+        &lt;div&gt;
+            <span class="comment">// UI automatically updates when state changes</span>
+            &lt;div className=<span class="string">"counter"</span> style={{ color: count > <span class="number">0</span> ? <span class="string">'#2c3e50'</span> : count < <span class="number">0</span> ? <span class="string">'#e74c3c'</span> : <span class="string">'#2c3e50'</span> }}&gt;
+                {count}
+            &lt;/div&gt;
+            &lt;div className=<span class="string">"buttons"</span>&gt;
+                &lt;button className=<span class="string">"btn-primary"</span> onClick={() => <span class="function">setCount</span>(count + <span class="number">1</span>)}&gt;
+                    Increment
+                &lt;/button&gt;
+                &lt;button className=<span class="string">"btn-secondary"</span> onClick={() => <span class="function">setCount</span>(count - <span class="number">1</span>)}&gt;
+                    Decrement
+                &lt;/button&gt;
+                &lt;button onClick={() => <span class="function">setCount</span>(<span class="number">0</span>)}&gt;
+                    Reset
+                &lt;/button&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    );
+}
+
+<span class="comment">// Render the component</span>
+ReactDOM.<span class="function">createRoot</span>(document.<span class="function">getElementById</span>(<span class="string">'react-root'</span>)).render(&lt;Counter /&gt;);</code></pre>
+            </div>
+            
+            <div class="explanation">
+                <h3>Declarative Approach Characteristics:</h3>
+                <ul>
+                    <li>You describe <strong>what</strong> the UI should look like</li>
+                    <li>React automatically updates the DOM when state changes</li>
+                    <li>No manual DOM manipulation needed</li>
+                    <li>UI is a function of state - when state changes, UI updates automatically</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Imperative JavaScript implementation
+        const counterElement = document.getElementById('counter-value');
+        const incrementBtn = document.getElementById('increment-btn');
+        const decrementBtn = document.getElementById('decrement-btn');
+        const resetBtn = document.getElementById('reset-btn');
+
+        let count = 0;
+
+        function updateUI() {
+            counterElement.textContent = count;
+            counterElement.style.color = count > 0 ? '#2c3e50' : count < 0 ? '#e74c3c' : '#2c3e50';
+        }
+
+        incrementBtn.addEventListener('click', () => {
+            count++;
+            updateUI();
+        });
+
+        decrementBtn.addEventListener('click', () => {
+            count--;
+            updateUI();
+        });
+
+        resetBtn.addEventListener('click', () => {
+            count = 0;
+            updateUI();
+        });
+
+        updateUI();
+    </script>
+
+    <script type="text/babel">
+        // React implementation
+        function Counter() {
+            const [count, setCount] = React.useState(0);
+            
+            return (
+                <div>
+                    <div className="counter" style={{ color: count > 0 ? '#2c3e50' : count < 0 ? '#e74c3c' : '#2c3e50' }}>
+                        {count}
+                    </div>
+                    <div className="buttons">
+                        <button className="btn-primary" onClick={() => setCount(count + 1)}>
+                            Increment
+                        </button>
+                        <button className="btn-secondary" onClick={() => setCount(count - 1)}>
+                            Decrement
+                        </button>
+                        <button onClick={() => setCount(0)}>
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('react-root')).render(<Counter />);
+    </script>
+</body>
+</html>
